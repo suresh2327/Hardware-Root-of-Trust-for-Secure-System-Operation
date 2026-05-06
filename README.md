@@ -27,14 +27,12 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 | Folder | Description |
 |--------|-------------|
 | **`01_Specifications/`** | Contains specifications, security requirements, and feature definitions. |
-| **`02_Architecture/`** | Contains architectural diagrams, FSM descriptions, and system-level design. |
-| **`03_RTL_Design/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
-| **`04_Functional_verification/`** | Contains UVM testbenches, verification plans, and test scripts. |
-| **`05_Presentations/`** | Contains final slide decks, project reports, and team presentations. |
+| **`02_RTL_Design/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
+| **`03_Functional_verification/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`04_Presentations/`** | Contains final slide decks, project reports, and team presentations. |
 
 ## 🧰 Tools Used
 - **Hardware Language:** SystemVerilog
-- **Simulation & Verification:** Cadence Xcelium / UVM Integration
+- **Simulation & Verification:** Cadence Xcelium,Genus,innovus / UVM Integration
 
-## 👤 Author Section
 *Designed and Compiled to showcase advanced hardware security and VLSI verification methodologies.*
