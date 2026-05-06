@@ -19,3 +19,4 @@ The architecture is divided into two primary hardware subsystems:
 The following architectural documents represent the blueprint of the system:
 - **FSM Documents:** Contains state transition graphs and signal-level explanations for the Boot Controller.
 - **Architecture Diagrams:** High-level overview of the Data path and Control path of the RoT logic.
+- 
