@@ -15,3 +15,4 @@ The system functions as an immutable secure boot controller. Upon power-up, the 
 - **Hardware Isolation:** Cryptographic operations are isolated from the main CPU to prevent software side-channel attacks.
 - **Immutable BootROM:** The initial RoT sequence cannot be bypassed, tampered with, or modified by malicious software.
 - **Tamper Response:** Unsuccessful authentications immediately lock the system, preventing brute-force attack attempts.
+- 
