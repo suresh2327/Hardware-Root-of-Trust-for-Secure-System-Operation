@@ -15,10 +15,7 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 - **ASIC Design Ready:** Implemented with standard RTL-to-GDSII flows in mind.
 - **UVM Verification:** Rigorously tested using the Universal Verification Methodology (UVM).
 
-## 🏗️ System Architecture
-The top-level view comprises the Secure Boot FSM and the SHA-256 Cryptographic module working in tandem to fetch, hash, and verify firmware signatures before releasing the system reset.
 
-![System Architecture](02_Architecture/ROT%20Architecture.jpeg)
 
 ## 🛠️ VLSI Design Flow
 1. **Specifications & Architecture:** Defining the RoT protocols, FSM states, and threat models.
