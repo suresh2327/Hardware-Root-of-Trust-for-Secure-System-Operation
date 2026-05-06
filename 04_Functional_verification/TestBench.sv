@@ -6,6 +6,7 @@
 //  Converts a string to 32-bit word stream with correct padding.
 //  Throttles to only send when auth_engine is in COLLECT state.
 // ----------------------------------------------------------------
+
 module firmware_ascii_loader (
     input  logic        clk,
     output logic [31:0] fw_data,
