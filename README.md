@@ -18,6 +18,8 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 ## 🏗️ System Architecture
 The top-level view comprises the Secure Boot FSM and the SHA-256 Cryptographic module working in tandem to fetch, hash, and verify firmware signatures before releasing the system reset.
 
+![System Architecture](02_Architecture/ROT%20Architecture.jpeg)
+
 ## 🛠️ VLSI Design Flow
 1. **Specifications & Architecture:** Defining the RoT protocols, FSM states, and threat models.
 2. **RTL Design:** Writing SystemVerilog for the SHA-256 engine and Boot Controller.
@@ -31,6 +33,7 @@ The top-level view comprises the Secure Boot FSM and the SHA-256 Cryptographic m
 | **`02_Architecture/`** | Contains architectural diagrams, FSM descriptions, and system-level design. |
 | **`03_RTL_Design/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
 | **`04_Functional_verification/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`05_Presentations/`** | Contains final slide decks, project reports, and team presentations. |
 
 ## 🧰 Tools Used
 - **Hardware Language:** SystemVerilog

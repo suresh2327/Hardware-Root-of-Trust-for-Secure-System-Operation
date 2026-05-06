@@ -7,6 +7,8 @@ The architecture is divided into two primary hardware subsystems:
 1. **Boot Controller FSM:** Orchestrates the boot process, data fetching, and decision logic.
 2. **SHA-256 Cryptographic Engine:** Performs the data hashing mathematically and provides the resulting digest to the Boot Controller.
 
+![System Architecture](ROT%20Architecture.jpeg)
+
 ## 🔄 FSM Description
 - **POWER_ON_RESET:** System initializes, and the CPU is strictly held in reset.
 - **FETCH_FIRMWARE:** RoT module reads firmware blocks from internal/external memory.
