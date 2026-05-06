@@ -68,7 +68,7 @@ PASS / FAIL Verification
 
 ---
 
-## Directory Structure
+## TestBench Structure
 
 ```text
 tb/
