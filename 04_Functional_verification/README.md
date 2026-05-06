@@ -15,3 +15,4 @@ Verification is rigorously performed using the **Universal Verification Methodol
 - **UVM Sequences**: Generates various firmware payloads (valid signatures, corrupted hashes, and out-of-bounds lengths).
 - **UVM Scoreboard**: Automates output checking by comparing RTL hash digests and Boot Controller decisions against the ideal predictor.
 - **Coverage Reports**: Detailed functional and code coverage reports to ensure 100% verification completeness.
+- 
