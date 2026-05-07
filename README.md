@@ -26,12 +26,12 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 ## 📂 Folder Structure Explanation
 | Folder | Description |
 |--------|-------------|
-| **`01_Specifications/`** | Contains specifications, security requirements, and feature definitions. |
-| **`02_RTL_Code/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
-| **`03_TestBench/`** | Contains UVM testbenches, verification plans, and test scripts. |
-| **`04_Logic_synthesis/`** | Contains UVM testbenches, verification plans, and test scripts. |
-| **`05_Physical_Design/`** | Contains UVM testbenches, verification plans, and test scripts. |
-| **`06_Outputs/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`01_Specifications/`** | Contains project specifications, security requirements, architecture details, and feature definitions. |
+| **`02_RTL_Code/`** | Contains SystemVerilog RTL modules for the Hardware Root-of-Trust architecture. |
+| **`03_TestBench/`** | Contains UVM verification environment, testbenches, and simulation test cases. |
+| **`04_Logic_Synthesis/`** | Contains synthesis scripts, timing constraints, gate-level netlists, and synthesis reports generated using Cadence Genus. |
+| **`05_Physical_Design/`** | Contains floorplanning, placement, CTS, routing data, physical verification reports, and layout implementation files generated using Cadence Innovus. |
+| **`06_Outputs/`** | Contains final design outputs including simulation results, timing reports, power reports, area reports, and GDSII layout files. |
 
 
 ## 🧰 Tools Used
