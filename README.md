@@ -27,9 +27,12 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 | Folder | Description |
 |--------|-------------|
 | **`01_Specifications/`** | Contains specifications, security requirements, and feature definitions. |
-| **`02_RTL_Design/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
-| **`03_Functional_verification/`** | Contains UVM testbenches, verification plans, and test scripts. |
-| **`04_Presentations/`** | Contains final slide decks, project reports, and team presentations. |
+| **`02_RTL_Code/`** | Contains the SystemVerilog RTL code for the secure boot controller and SHA-256 engine. |
+| **`03_TestBench/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`04_Logic_synthesis/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`05_Physical_Design/`** | Contains UVM testbenches, verification plans, and test scripts. |
+| **`06_Outputs/`** | Contains UVM testbenches, verification plans, and test scripts. |
+
 
 ## 🧰 Tools Used
 - **Hardware Language:** SystemVerilog
