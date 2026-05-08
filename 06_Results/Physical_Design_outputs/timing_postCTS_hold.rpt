@@ -1,24 +1,24 @@
-*** timeDesign #3 [begin] : totSession cpu/real = 0:52:45.3/0:53:34.1 (1.0), mem = 2388.7M
+*** timeDesign #3 [begin] : totSession cpu/real = 0:16:18.1/0:16:45.7 (1.0), mem = 2384.7M
 Start to check current routing status for nets...
 All nets are already routed correctly.
-End to check current routing status for nets (mem=2375.2M)
+End to check current routing status for nets (mem=2371.2M)
 Starting delay calculation for Hold views
 AAE_INFO: opIsDesignInPostRouteState() is 0
 #################################################################################
 # Design Stage: PreRoute
-# Design Name: sha256_core
+# Design Name: rot_top
 # Design Mode: 90nm
 # Analysis Mode: MMMC Non-OCV 
 # Parasitics Mode: No SPEF/RCDB 
 # Signoff Settings: SI Off 
 #################################################################################
 Calculate delays in Single mode...
-Start delay calculation (fullDC) (1 T). (MEM=2390.71)
-Total number of fetched objects 17867
+Start delay calculation (fullDC) (1 T). (MEM=2375.18)
+Total number of fetched objects 18157
 AAE_INFO: Total number of nets for which stage creation was skipped for all views 0
-End delay calculation. (MEM=2423.15 CPU=0:00:02.8 REAL=0:00:02.0)
-End delay calculation (fullDC). (MEM=2423.15 CPU=0:00:03.4 REAL=0:00:03.0)
-*** Done Building Timing Graph (cpu=0:00:04.0 real=0:00:04.0 totSessionCpu=0:52:50 mem=2423.1M)
+End delay calculation. (MEM=2419.12 CPU=0:00:03.4 REAL=0:00:04.0)
+End delay calculation (fullDC). (MEM=2419.12 CPU=0:00:04.2 REAL=0:00:04.0)
+*** Done Building Timing Graph (cpu=0:00:05.0 real=0:00:05.0 totSessionCpu=0:16:24 mem=2419.1M)
 
 ------------------------------------------------------------------
           timeDesign Summary
@@ -30,16 +30,16 @@ Hold views included:
 +--------------------+---------+---------+---------+
 |     Hold mode      |   all   | reg2reg | default |
 +--------------------+---------+---------+---------+
-|           WNS (ns):|  0.017  |  0.017  |  0.821  |
+|           WNS (ns):|  0.112  |  0.112  |  0.788  |
 |           TNS (ns):|  0.000  |  0.000  |  0.000  |
 |    Violating Paths:|    0    |    0    |    0    |
-|          All Paths:|  6166   |  5908   |  3093   |
+|          All Paths:|  7172   |  7168   |   652   |
 +--------------------+---------+---------+---------+
 
-Density: 94.511%
+Density: 77.126%
 Routing Overflow: 0.00% H and 0.00% V
 ------------------------------------------------------------------
 Reported timing to dir ./timingReports
-Total CPU time: 5.6 sec
-Total Real time: 5.0 sec
-Total Memory Usage: 2360.632812 Mbytes
+Total CPU time: 6.9 sec
+Total Real time: 7.0 sec
+Total Memory Usage: 2356.609375 Mbytes

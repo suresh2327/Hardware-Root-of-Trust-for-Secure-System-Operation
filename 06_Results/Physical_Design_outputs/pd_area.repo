@@ -1,3 +1,4 @@
-    Hinst Name       Module Name          Inst Count           Total Area
-----------------------------------------------------------------------
-sha256_core                                    17168           145784.238
+    Hinst Name          Module Name          Inst Count           Total Area
+-------------------------------------------------------------------------
+rot_top                                           17643           165148.011
+ u_auth_engine_u_sha256 sha256_core               14507           128856.170

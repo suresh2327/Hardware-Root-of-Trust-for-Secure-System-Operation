@@ -1,2 +1,3 @@
 Gate area 2.2707 um^2
-Level 0 Module sha256_core                              Gates=     64202 Cells=   17168 Area=  145784.2 um^2
+Level 0 Module rot_top                                  Gates=     72730 Cells=   17643 Area=  165148.0 um^2
+Level 1 Module u_auth_engine_u_sha256                   Gates=56747      Cells=14507    Area=  128856.2 um^2
