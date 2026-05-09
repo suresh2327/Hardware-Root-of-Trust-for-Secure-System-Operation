@@ -192,6 +192,42 @@ The RTL implementation was verified for:
 - The project focuses primarily on boot-time firmware authentication.
 
 ---
+# Future Enhancements
+
+## 1. ROM/eFuse-Based Secure Key Storage
+The current implementation models trusted hash storage using parameterized RTL-based storage. Future versions can integrate ROM, eFuse, or OTP memory to provide stronger immutable hardware-level trust anchoring.
+
+---
+
+## 2. Firmware Rollback Protection
+Version-checking mechanisms can be added to prevent execution of outdated or vulnerable firmware images during the secure boot process.
+
+---
+
+## 3. Secure OTA Firmware Update Verification
+Future implementations can support secure Over-The-Air (OTA) firmware update authentication using cryptographic verification before firmware installation and execution.
+
+---
+
+## 4. Enhanced Verification Environment
+The current functional verification flow can be extended with complete UVM-based constrained-random verification, assertions, and functional coverage analysis.
+
+---
+
+## 5. Recovery Mode Implementation
+A dedicated secure recovery mechanism can be integrated to restore valid firmware after authentication failure or lockdown conditions.
+
+---
+
+## 6. Runtime Firmware Integrity Monitoring
+The architecture can be extended to periodically monitor firmware integrity during runtime in addition to boot-time authentication.
+
+---
+
+## 7. Hardened Debug Access Control
+Future versions can integrate authenticated debug access protection for interfaces such as JTAG to prevent unauthorized hardware debugging.
+
+---
 
 # 🎯 Project Objective
 
