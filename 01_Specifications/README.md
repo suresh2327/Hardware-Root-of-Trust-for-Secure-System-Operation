@@ -15,7 +15,7 @@ The architecture uses SHA-256 cryptographic verification and hardware-enforced c
 | Security Function | Secure Boot & Firmware Authentication |
 | Authentication Method | SHA-256 Cryptographic Verification |
 | Design Language | SystemVerilog |
-| Verification Methodology | UVM |
+| Verification Methodology | UVM based SystemVerilog|
 | Simulation Tool | Cadence Xcelium |
 | Synthesis Tool | Cadence Genus |
 | Physical Design Tool | Cadence Innovus |
