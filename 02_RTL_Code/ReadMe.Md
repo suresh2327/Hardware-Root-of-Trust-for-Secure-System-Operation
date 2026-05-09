@@ -17,7 +17,7 @@ This directory contains the SystemVerilog RTL implementation of a Hardware Root-
 | `retry_counter` | Tracks failed authentication attempts |
 | `lockdown_ctrl` | Activates secure lockdown on critical failure |
 | `cpu_reset_ctrl` | Controls CPU release after authentication |
-| `debug_ctrl` | Restricts debug access during secure boot |
+
 
 ---
 
@@ -72,7 +72,7 @@ rtl/
 ├── retry_counter.sv
 ├── lockdown_ctrl.sv
 ├── cpu_reset_ctrl.sv
-└── debug_ctrl.sv
+
 ```
 
 ---
