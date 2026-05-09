@@ -53,7 +53,7 @@ CPU Enable / Secure Lockdown
 | Category | Tool / Technology |
 |---|---|
 | HDL | SystemVerilog |
-| Verification Methodology | UVM |
+| Verification Methodology | UVM-inspired SystemVerilog verification |
 | Simulation | Cadence Xcelium |
 | Synthesis | Cadence Genus |
 | Physical Design | Cadence Innovus |
