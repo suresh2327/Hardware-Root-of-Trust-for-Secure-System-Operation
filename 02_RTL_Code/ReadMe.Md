@@ -1,7 +1,9 @@
 # RTL Design – Hardware Root-of-Trust (RoT)
 
 ## Overview
-This directory contains the SystemVerilog RTL implementation of a Hardware Root-of-Trust (RoT) designed for secure boot and firmware authentication in embedded and SoC platforms. The architecture verifies firmware integrity before CPU execution, ensuring that only trusted firmware is allowed to run.
+This directory contains the SystemVerilog RTL implementation of a prototype Hardware Root-of-Trust (RoT) architecture designed for secure boot and firmware authentication in embedded and SoC platforms. The design verifies firmware integrity before CPU execution, ensuring that only authenticated firmware is allowed to execute during system startup.
+
+The implementation focuses on hardware-level secure boot control using SHA-256 based firmware authentication and trusted execution enforcement.
 
 ---
 
@@ -10,14 +12,13 @@ This directory contains the SystemVerilog RTL implementation of a Hardware Root-
 | Module | Description |
 |---|---|
 | `rot_top` | Top-level integration of all RoT modules |
-| `boot_ctrl_fsm` | Controls secure boot sequence and state transitions |
-| `auth_engine` | Performs firmware authentication using SHA-256 |
-| `secure_key_storage` | Provides immutable trusted key/hash storage |
-| `policy_engine` | Generates boot allow/deny decisions |
+| `boot_ctrl_fsm` | Controls secure boot sequencing and authentication flow |
+| `auth_engine` | Performs firmware hash verification using SHA-256 |
+| `secure_key_storage` | Parameterized secure reference hash storage model for authentication |
+| `policy_engine` | Generates boot allow or deny decisions |
 | `retry_counter` | Tracks failed authentication attempts |
-| `lockdown_ctrl` | Activates secure lockdown on critical failure |
-| `cpu_reset_ctrl` | Controls CPU release after authentication |
-
+| `lockdown_ctrl` | Activates secure lockdown after repeated failures |
+| `cpu_reset_ctrl` | Controls CPU reset release after authentication |
 
 ---
 
@@ -30,9 +31,10 @@ Boot Initialization
    ↓
 Firmware Authentication
    ↓
-Trusted Verification
+Hash Verification
    ↓
-CPU Enable / Secure Lockdown
+PASS → CPU Enable
+FAIL → Lockdown / Reset
 ```
 
 ---
@@ -41,10 +43,10 @@ CPU Enable / Secure Lockdown
 
 - Hardware-Enforced Secure Boot
 - SHA-256 Firmware Authentication
-- Secure CPU Execution Control
-- Immutable Trust Anchor
+- CPU Reset-Based Execution Control
 - Retry & Lockdown Protection
 - Modular Synthesizable RTL Architecture
+- ASIC-Oriented Hardware Design Flow
 
 ---
 
@@ -53,10 +55,23 @@ CPU Enable / Secure Lockdown
 | Category | Tool / Technology |
 |---|---|
 | HDL | SystemVerilog |
-| Verification Methodology | UVM-inspired SystemVerilog verification |
+| Verification | SystemVerilog-based Functional Verification |
 | Simulation | Cadence Xcelium |
 | Synthesis | Cadence Genus |
 | Physical Design | Cadence Innovus |
+
+---
+
+## Secure Key Storage Note
+
+The current implementation models trusted hash storage using parameterized RTL-based secure storage for prototype verification purposes.
+
+In practical silicon implementations, this storage would typically be implemented using:
+- ROM
+- eFuse
+- OTP (One-Time Programmable) memory
+
+to provide immutable hardware-level trust anchoring.
 
 ---
 
@@ -72,13 +87,24 @@ rtl/
 ├── retry_counter.sv
 ├── lockdown_ctrl.sv
 ├── cpu_reset_ctrl.sv
-
 ```
 
 ---
 
-## Objective
-To establish a hardware-based trusted boot mechanism capable of preventing unauthorized firmware execution and protecting the system during startup.
+## Verification Coverage
+
+The RTL implementation was functionally verified for:
+- Authentication PASS scenario
+- Authentication FAIL scenario
+- Retry counter operation
+- Lockdown activation
+- CPU reset enforcement
+- Secure boot state transitions
 
 ---
 
+## Objective
+
+To demonstrate a synthesizable hardware-based secure boot architecture capable of authenticating firmware before CPU execution and establishing a trusted startup mechanism for embedded systems and SoC platforms.
+
+---
