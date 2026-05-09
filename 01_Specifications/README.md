@@ -43,13 +43,16 @@ The architecture uses SHA-256 cryptographic verification and hardware-enforced c
 
 # 🧠 Problem Statement
 
-Firmware stored in rewritable memory is vulnerable to tampering and unauthorized modification. In the absence of hardware-level verification, compromised firmware can execute during system startup, leading to critical system-level security risks.
+Modern embedded systems and SoC platforms store firmware in external flash memory, which is rewritable and physically accessible to an attacker. A supply-chain compromise, physical access attack, or software exploit can modify firmware stored in flash before the device powers on. At power-on the CPU has no mechanism to verify whether the firmware it is about to execute is the original authentic image or a tampered replacement. Software-level protections such as antivirus scanners, OS integrity checkers, and secure boot libraries are all ineffective at this stage because they execute after the firmware has already been loaded and the CPU has already started running. The attack completes before any software defence can activate. A hardware mechanism that cryptographically verifies firmware authenticity before releasing the CPU from reset is therefore required.
 
 ---
 
 # 💡 Solution
 
-This project implements a Hardware Root-of-Trust that authenticates firmware using SHA-256 cryptographic verification before CPU execution. The system allows execution only for trusted firmware and blocks unauthorized or modified firmware.
+ To address this issue, this project implements a Hardware Root-of-Trust architecture that authenticates firmware before CPU execution using SHA-256 cryptographic verification.
+The Root-of-Trust establishes a trusted hardware security boundary by comparing the generated firmware hash against a securely stored trusted hash value. If the authentication succeeds, the CPU is released for normal execution. If authentication fails, the system blocks execution by maintaining the CPU in reset mode or entering a secure lockdown state.
+This approach ensures that only trusted firmware is allowed to execute, thereby protecting the system from firmware-level attacks and unauthorized control.
+
 
 ---
 
@@ -64,7 +67,6 @@ rot_top
  ├── retry_counter
  ├── lockdown_ctrl
  ├── cpu_reset_ctrl
- └── debug_ctrl
 ```
 
 ---
@@ -161,22 +163,6 @@ GDSII Generation
 
 ---
 
-# 📂 Repository Structure
-
-```text
-Hardware-RoT/
-│
-├── rtl/
-├── tb/
-├── synthesis/
-├── pnr/
-├── docs/
-├── scripts/
-└── README.md
-```
-
----
-
 # 🧪 Verification
 
 The design is verified for:
@@ -195,16 +181,6 @@ To design a secure, hardware-based trust mechanism that authenticates firmware b
 
 ---
 
-# 📌 Future Scope
-
-- Runtime Security Monitoring
-- AI-Assisted Policy Engine
-- Secure OTA Authentication
-- Advanced Threat Detection
-- Formal Verification
-
----
-
 # 👥 Team Information
 
 ## Team Name
@@ -220,10 +196,6 @@ To design a secure, hardware-based trust mechanism that authenticates firmware b
 
 ---
 
-# 📜 License
-This project is intended for academic and research purposes.
-
----
 
 # 🙏 Acknowledgement
 We thank our faculty mentors and institution for supporting this project development.
