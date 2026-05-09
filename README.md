@@ -32,6 +32,7 @@ With the rise of hardware security threats and unauthorized firmware modificatio
 | **`04_Logic_Synthesis/`** | Contains synthesis scripts, timing constraints, gate-level netlists, and synthesis reports generated using Cadence Genus. |
 | **`05_Physical_Design/`** | Contains floorplanning, placement, CTS, routing data, physical verification reports, and layout implementation files generated using Cadence Innovus. |
 | **`06_Outputs/`** | Contains final design outputs including simulation results, timing reports, power reports, area reports, and GDSII layout files. |
+| **`07_Script_Files/`** |script files for tool automation running for cadence genus and innovus |
 
 
 ## 🧰 Tools Used
