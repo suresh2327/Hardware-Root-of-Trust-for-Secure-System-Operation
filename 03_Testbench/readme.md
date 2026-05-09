@@ -39,7 +39,7 @@ The testbench is designed for functional verification of the RTL implementation 
 
 | Category | Technology |
 |---|---|
-| Verification Language | SystemVerilog |
+| Verification Language | SystemVerilog / UVM |
 | Verification Style | Directed Functional Verification |
 | Simulation Tool | Cadence Xcelium |
 
@@ -84,6 +84,19 @@ tb/
 ├── testcases.sv
 └── interface.sv
 ```
+
+03_Testbench/
+├── rot_tb_top.sv          ← your existing testbench (keep it)
+├── uvm_rot_pkg.sv         ← NEW: package that includes all UVM files
+├── rot_if.sv              ← NEW: interface
+├── rot_seq_item.sv        ← NEW: transaction object
+├── rot_driver.sv          ← NEW: driver
+├── rot_monitor.sv         ← NEW: monitor
+├── rot_agent.sv           ← NEW: agent (contains driver + monitor)
+├── rot_scoreboard.sv      ← NEW: scoreboard
+├── rot_env.sv             ← NEW: environment
+├── rot_base_test.sv       ← NEW: base test
+└── rot_sequences.sv       ← NEW: sequences (pass/fail/lockdown scenarios)
 
 ---
 
