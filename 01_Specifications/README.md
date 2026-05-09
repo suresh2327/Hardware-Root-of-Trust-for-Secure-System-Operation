@@ -22,7 +22,7 @@ The architecture uses SHA-256 cryptographic verification and hardware-enforced c
 | Output Format | GDSII |
 | Target Platform | Embedded Systems & SoCs |
 | Security Mechanism | Hardware-Enforced CPU Control |
-| Key Storage | Immutable Secure Storage (ROM/OTP Model) |
+| Key Storage | Immutable Secure Storage  |
 | Boot Protection | Firmware Verification Before CPU Execution |
 | Fail-Safe Mechanism | Retry Counter & Lockdown Control |
 
