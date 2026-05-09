@@ -1,31 +1,37 @@
 # Testbench – Hardware Root-of-Trust (RoT)
 
 ## Overview
-This directory contains the verification environment and testbench implementation for validating the functionality of the Hardware Root-of-Trust (RoT) architecture. The verification environment is developed using SystemVerilog and UVM methodology to ensure correct secure boot operation and firmware authentication behavior.
+
+This directory contains the SystemVerilog-based functional verification environment used to validate the behavior of the Hardware Root-of-Trust (RoT) architecture.
+
+The verification environment focuses on validating secure boot control, firmware authentication flow, retry handling, lockdown behavior, and CPU reset enforcement under different authentication scenarios.
+
+The testbench is designed for functional verification of the RTL implementation using directed verification scenarios in Cadence Xcelium simulation environment.
 
 ---
 
 ## Verification Objectives
 
 - Validate secure boot functionality
-- Verify firmware authentication flow
+- Verify firmware authentication behavior
 - Ensure controlled CPU execution
 - Detect invalid firmware conditions
-- Validate retry and lockdown mechanisms
-- Verify reset and control behavior
+- Validate retry counter operation
+- Verify lockdown activation
+- Confirm reset and state transition behavior
 
 ---
 
-## Test Scenarios
+## Verification Scenarios
 
 | Test Case | Description |
 |---|---|
-| Authentication PASS | Valid firmware authentication |
+| Authentication PASS | Valid firmware authentication flow |
 | Authentication FAIL | Detection of modified firmware |
 | Retry Validation | Multiple failed authentication attempts |
-| Lockdown Verification | Secure lockdown activation |
-| CPU Reset Control | CPU release only after verification |
-| Reset Functionality | System behavior during reset |
+| Lockdown Verification | Secure lockdown activation after retry limit |
+| CPU Reset Control | CPU release only after successful authentication |
+| Reset Functionality | System reset and FSM recovery behavior |
 
 ---
 
@@ -34,7 +40,7 @@ This directory contains the verification environment and testbench implementatio
 | Category | Technology |
 |---|---|
 | Verification Language | SystemVerilog |
-| Methodology | UVM |
+| Verification Style | Directed Functional Verification |
 | Simulation Tool | Cadence Xcelium |
 
 ---
@@ -43,51 +49,72 @@ This directory contains the verification environment and testbench implementatio
 
 | Component | Function |
 |---|---|
-| Driver | Drives firmware and control signals |
-| Monitor | Observes DUT behavior |
-| Scoreboard | Validates expected functionality |
-| Sequence | Generates verification scenarios |
-| Agent | Controls verification components |
-| Environment | Integrates complete testbench |
+| Testbench Top | Integrates DUT and verification signals |
+| Stimulus Generator | Applies firmware and control inputs |
+| DUT Monitor | Observes DUT outputs and state transitions |
+| Result Checker | Validates expected authentication behavior |
+| Waveform Analysis | Verifies timing and signal activity |
 
 ---
 
-## Functional Flow
+## Functional Verification Flow
 
 ```text
 Generate Test Stimulus
         ↓
-Drive Firmware Data
+Apply Firmware Data
         ↓
-Monitor DUT Response
+Execute Authentication Flow
         ↓
-Compare Expected Results
+Monitor DUT Behavior
         ↓
-PASS / FAIL Verification
+Validate PASS / FAIL Results
 ```
 
 ---
 
-## TestBench Structure
+## Testbench Structure
 
 ```text
 tb/
 ├── testbench.sv
-├── interface.sv
-├── driver.sv
+├── stimulus.sv
 ├── monitor.sv
-├── scoreboard.sv
-├── sequence.sv
-├── agent.sv
-├── env.sv
-└── test.sv
+├── checker.sv
+├── testcases.sv
+└── interface.sv
 ```
 
 ---
 
-## Expected Outcome
-The verification environment ensures that the RoT design correctly authenticates firmware, prevents unauthorized execution, and maintains secure system behavior under all test conditions.
+## Verification Coverage
+
+The verification environment validates:
+- Secure boot sequence
+- SHA-256 authentication control flow
+- PASS authentication condition
+- FAIL authentication condition
+- Retry exhaustion handling
+- Lockdown activation
+- CPU reset enforcement
+- FSM state transitions
 
 ---
 
+## Simulation Environment
 
+Functional simulation was performed using Cadence Xcelium to verify RTL correctness and secure boot operation before synthesis and physical design implementation.
+
+Simulation outputs include:
+- Console verification logs
+- Authentication PASS/FAIL waveforms
+- FSM transition timing diagrams
+- CPU reset and lockdown behavior
+
+---
+
+## Expected Outcome
+
+The verification environment ensures that the Hardware Root-of-Trust architecture correctly authenticates firmware before CPU execution and prevents unauthorized boot operation during invalid authentication conditions.
+
+---
