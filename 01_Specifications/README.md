@@ -1,28 +1,29 @@
-# 🔐 Hardware Root-of-Trust (RoT) for Secure System Operation
+# 🔐 Hardware Root-of-Trust (RoT) – Specifications
 
 ## 📌 Overview
-This project implements a synthesizable Hardware Root-of-Trust (RoT) architecture for secure boot and firmware authentication in modern embedded and SoC platforms. The design ensures that only authenticated and trusted firmware is executed before CPU startup, preventing unauthorized code execution and boot-level attacks.
 
-The architecture uses SHA-256 cryptographic verification and hardware-enforced control logic to establish trust at the root level of the system.
+This specification document defines the architecture, functionality, and implementation scope of a prototype Hardware Root-of-Trust (RoT) designed for secure boot and firmware authentication in embedded systems and SoC platforms.
+
+The architecture establishes hardware-level trust by verifying firmware integrity before CPU execution using SHA-256 cryptographic authentication. The design focuses on secure boot control, trusted execution enforcement, retry protection, and secure lockdown behavior during authentication failure conditions.
 
 ---
 
-# 📋 Specifications
+# 📋 System Specifications
 
 | Parameter | Specification |
 |---|---|
-| Project Type | Hardware Root-of-Trust (RoT) |
+| Project Type | Prototype Hardware Root-of-Trust (RoT) |
 | Security Function | Secure Boot & Firmware Authentication |
 | Authentication Method | SHA-256 Cryptographic Verification |
 | Design Language | SystemVerilog |
-| Verification Methodology | UVM-inspired SystemVerilog verification|
+| Verification Approach | SystemVerilog-based Functional Verification |
 | Simulation Tool | Cadence Xcelium |
 | Synthesis Tool | Cadence Genus |
 | Physical Design Tool | Cadence Innovus |
 | Output Format | GDSII |
 | Target Platform | Embedded Systems & SoCs |
-| Security Mechanism | Hardware-Enforced CPU Control |
-| Key Storage | Immutable Secure Storage  |
+| Security Mechanism | Hardware-Controlled CPU Execution |
+| Key Storage Model | Parameterized Secure Reference Storage |
 | Boot Protection | Firmware Verification Before CPU Execution |
 | Fail-Safe Mechanism | Retry Counter & Lockdown Control |
 
@@ -32,27 +33,31 @@ The architecture uses SHA-256 cryptographic verification and hardware-enforced c
 
 - Hardware-Enforced Secure Boot
 - SHA-256 Firmware Authentication
-- Immutable Secure Key Storage
-- Controlled CPU Execution
+- CPU Reset-Based Execution Control
 - Retry & Lockdown Protection
-- Hardware-Level Trust Enforcement
-- Synthesizable RTL Design
-- RTL-to-GDSII ASIC Flow
+- Modular RTL Architecture
+- Synthesizable ASIC-Oriented Design
+- RTL-to-GDSII Design Flow
 
 ---
 
 # 🧠 Problem Statement
 
-Modern embedded systems and SoC platforms store firmware in external flash memory, which is rewritable and physically accessible to an attacker. A supply-chain compromise, physical access attack, or software exploit can modify firmware stored in flash before the device powers on. At power-on the CPU has no mechanism to verify whether the firmware it is about to execute is the original authentic image or a tampered replacement. Software-level protections such as antivirus scanners, OS integrity checkers, and secure boot libraries are all ineffective at this stage because they execute after the firmware has already been loaded and the CPU has already started running. The attack completes before any software defence can activate. A hardware mechanism that cryptographically verifies firmware authenticity before releasing the CPU from reset is therefore required.
+Modern embedded systems and SoC platforms rely heavily on firmware during system startup and hardware initialization. Since firmware is commonly stored in rewritable flash memory, it becomes vulnerable to tampering, unauthorized modification, and malicious firmware replacement attacks.
+
+At power-on, the CPU may begin executing firmware without verifying whether the loaded image is authentic or modified. Software-level protection mechanisms become ineffective during this early boot stage because they execute only after firmware execution begins.
+
+A hardware-based secure boot mechanism is therefore required to verify firmware integrity before CPU startup and establish trusted system execution from the root level of the hardware.
 
 ---
 
-# 💡 Solution
+# 💡 Proposed Solution
 
- To address this issue, this project implements a Hardware Root-of-Trust architecture that authenticates firmware before CPU execution using SHA-256 cryptographic verification.
-The Root-of-Trust establishes a trusted hardware security boundary by comparing the generated firmware hash against a securely stored trusted hash value. If the authentication succeeds, the CPU is released for normal execution. If authentication fails, the system blocks execution by maintaining the CPU in reset mode or entering a secure lockdown state.
-This approach ensures that only trusted firmware is allowed to execute, thereby protecting the system from firmware-level attacks and unauthorized control.
+This project implements a prototype Hardware Root-of-Trust architecture that authenticates firmware before CPU execution using SHA-256 cryptographic verification.
 
+The architecture compares the generated firmware hash with a trusted reference hash stored within the secure storage model. If authentication succeeds, the CPU is released for normal execution. If authentication fails, the system blocks execution by maintaining CPU reset control or entering secure lockdown mode after repeated failures.
+
+This approach establishes a hardware-controlled trusted boot mechanism capable of preventing unauthorized firmware execution during system startup.
 
 ---
 
@@ -78,26 +83,26 @@ Power ON
    ↓
 CPU Held in Reset
    ↓
-Firmware Loaded from Memory
+Firmware Stream Provided
    ↓
 SHA-256 Authentication
    ↓
-Verification with Trusted Key
+Hash Verification
    ↓
-PASS → CPU Execution Allowed
-FAIL → Lockdown / Execution Blocked
+PASS → CPU Enable
+FAIL → Retry / Lockdown
 ```
 
 ---
 
 # 🔐 Security Features
 
-- Prevents unauthorized firmware execution
-- Ensures trusted boot process
-- Protects against firmware tampering
-- Hardware-based non-bypassable security
-- Secure storage of trusted keys
-- Fail-safe lockdown mechanism
+- Firmware integrity verification before execution
+- Hardware-controlled boot authorization
+- CPU reset enforcement during authentication
+- Retry limitation against repeated failures
+- Secure lockdown protection mechanism
+- Hardware-level trusted boot operation
 
 ---
 
@@ -105,17 +110,21 @@ FAIL → Lockdown / Execution Blocked
 
 ## 🚗 Automotive Systems
 - ECU Security
-- ADAS Systems
-- OTA Firmware Updates
+- ADAS Controllers
+- Secure Firmware Updates
 
 ## 🌐 IoT Devices
-- Smart Home Systems
-- Industrial IoT
-- Smart Security Devices
+- Smart Home Devices
+- Industrial IoT Platforms
+- Secure Embedded Controllers
 
-## 🏥 Medical Devices
+## 🏥 Medical Electronics
+- Embedded Medical Devices
 - Patient Monitoring Systems
-- Embedded Medical Controllers
+
+## 🏭 Industrial Systems
+- Industrial Automation Controllers
+- Secure Embedded Monitoring Units
 
 ---
 
@@ -124,11 +133,11 @@ FAIL → Lockdown / Execution Blocked
 | Category | Technology |
 |---|---|
 | HDL | SystemVerilog |
-| Verification Methodology | UVM |
+| Verification | Functional SystemVerilog Verification |
 | Cryptographic Algorithm | SHA-256 |
 | Simulation | Cadence Xcelium |
 | Synthesis | Cadence Genus |
-| Place & Route | Cadence Innovus |
+| Physical Design | Cadence Innovus |
 | Final Output | GDSII |
 
 ---
@@ -163,21 +172,30 @@ GDSII Generation
 
 ---
 
-# 🧪 Verification
+# 🧪 Verification Scope
 
-The design is verified for:
+The RTL implementation was verified for:
+- Authentication PASS condition
+- Authentication FAIL condition
+- Retry counter operation
+- Lockdown activation
+- CPU reset control
+- Secure boot state transitions
 
-- Authentication PASS scenario
-- Authentication FAIL scenario
-- Retry exhaustion
-- Lockdown condition
-- CPU reset enforcement
+---
+
+# ⚠️ Current Implementation Notes
+
+- The current implementation models secure key storage using parameterized RTL-based storage for prototype validation.
+- External flash/DDR controller functionality is abstracted in the current architecture.
+- Runtime firmware monitoring is outside the current implementation scope.
+- The project focuses primarily on boot-time firmware authentication.
 
 ---
 
 # 🎯 Project Objective
 
-To design a secure, hardware-based trust mechanism that authenticates firmware before execution and establishes a trusted foundation for modern embedded systems.
+To demonstrate a synthesizable hardware-based secure boot architecture capable of authenticating firmware before CPU execution and establishing trusted startup operation for embedded systems and SoC platforms.
 
 ---
 
@@ -196,6 +214,8 @@ To design a secure, hardware-based trust mechanism that authenticates firmware b
 
 ---
 
-
 # 🙏 Acknowledgement
-We thank our faculty mentors and institution for supporting this project development.
+
+We thank our faculty mentors and institution for providing guidance and support throughout the development of this project.
+
+---
