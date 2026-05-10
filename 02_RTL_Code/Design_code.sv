@@ -594,7 +594,7 @@ logic debug_enable;
     .cpu_reset_n(cpu_reset_n)
   );
 
-  debug_ctrl u_debug_ctrl (
+debug_ctrl u_debug_ctrl (
     .clk             (clk),
     .rst_n           (rst_n),
     .auth_pass       (auth_pass),
@@ -602,5 +602,6 @@ logic debug_enable;
     .lockdown_active (lockdown_active),
     .jtag_disable    (jtag_disable),
     .debug_enable    (debug_enable)
+);
 );
 endmodule
