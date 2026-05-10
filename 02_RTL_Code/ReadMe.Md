@@ -19,6 +19,7 @@ The implementation focuses on hardware-level secure boot control using SHA-256 b
 | `retry_counter` | Tracks failed authentication attempts |
 | `lockdown_ctrl` | Activates secure lockdown after repeated failures |
 | `cpu_reset_ctrl` | Controls CPU reset release after authentication |
+| ` debug_ctrl `  | Disables JTAG/debug access during lockdown and untrusted boot |
 
 ---
 
