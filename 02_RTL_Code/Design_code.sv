@@ -417,7 +417,7 @@ endmodule
 //  Run: python3 -c "import hashlib; print(hashlib.sha256(b'YOUR_FW').hexdigest())"
 // ----------------------------------------------------------------
 module secure_key_storage #(
-  parameter logic [255:0] EXPECTED_HASH =
+  localparam logic [255:0] EXPECTED_HASH =
     256'hcc369d06174db4fa54f4f20ae1523a10f8aa409a4b51193135fc798ce426e40e
 )(
   input  logic        clk, rst_n,
@@ -593,10 +593,9 @@ debug_ctrl u_debug_ctrl (
     .clk             (clk),
     .rst_n           (rst_n),
     .auth_pass       (auth_pass),
-    .auth_fail       (auth_fail),
+    .auth_fail       (auth_fail_pulse),
     .lockdown_active (lockdown_active),
     .jtag_disable    (jtag_disable),
     .debug_enable    (debug_enable)
-);
 );
 endmodule
