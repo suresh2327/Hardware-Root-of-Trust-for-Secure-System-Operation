@@ -88,6 +88,38 @@ module tb_sv;
 
     initial clk=0;
     always #5 clk=~clk;
+    // ── Functional Coverage ──────────────────────────────────────────
+covergroup rot_coverage @(posedge clk);
+
+  cp_boot_pass: coverpoint boot_pass {
+    bins trusted  = {1};
+    bins rejected = {0};
+  }
+
+  cp_lockdown: coverpoint dut.lockdown_active {
+    bins no_lockdown = {0};
+    bins lockdown    = {1};
+  }
+
+  cp_cpu_reset: coverpoint cpu_reset_n {
+    bins cpu_running = {1};
+    bins cpu_blocked = {0};
+  }
+
+  cp_secure_mode: coverpoint secure_mode {
+    bins secure     = {1};
+    bins not_secure = {0};
+  }
+
+  // Cross coverage: boot_pass must only be 1 when cpu_reset_n is 1
+  cx_pass_cpu: cross cp_boot_pass, cp_cpu_reset;
+
+  // Cross coverage: lockdown must always block CPU
+  cx_lock_cpu: cross cp_lockdown, cp_cpu_reset;
+
+endgroup
+
+rot_coverage cov_inst = new();
 
     // ---- digest monitor: prints once when final SHA block completes ----
     always @(posedge clk) begin
@@ -238,38 +270,6 @@ module tb_sv;
         $display("\n========================================");
         $display("  ALL ROT TESTS COMPLETE");
         $display("========================================\n");
-            // ── Functional Coverage ──────────────────────────────────────────
-covergroup rot_coverage @(posedge clk);
-
-  cp_boot_pass: coverpoint boot_pass {
-    bins trusted  = {1};
-    bins rejected = {0};
-  }
-
-  cp_lockdown: coverpoint dut.lockdown_active {
-    bins no_lockdown = {0};
-    bins lockdown    = {1};
-  }
-
-  cp_cpu_reset: coverpoint cpu_reset_n {
-    bins cpu_running = {1};
-    bins cpu_blocked = {0};
-  }
-
-  cp_secure_mode: coverpoint secure_mode {
-    bins secure     = {1};
-    bins not_secure = {0};
-  }
-
-  // Cross coverage: boot_pass must only be 1 when cpu_reset_n is 1
-  cx_pass_cpu: cross cp_boot_pass, cp_cpu_reset;
-
-  // Cross coverage: lockdown must always block CPU
-  cx_lock_cpu: cross cp_lockdown, cp_cpu_reset;
-
-endgroup
-
-rot_coverage cov_inst = new();
         $display("Functional Coverage: %.1f%%", cov_inst.get_coverage());
         $finish;
     end
