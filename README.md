@@ -99,7 +99,7 @@ Authentication FAIL  → Retry / Lockdown
 |---|---|
 | Hardware Description Language | SystemVerilog |
 | Cryptographic Algorithm | SHA-256 |
-| Functional Verification | SystemVerilog-Based Verification |
+| Functional Verification | SystemVerilog Directed Testbench (5 test scenarios, Cadence Xcelium) |
 | Simulation Tool | Cadence Xcelium |
 | Logic Synthesis | Cadence Genus 21.14 |
 | Physical Design | Cadence Innovus 21.15 |
@@ -150,15 +150,12 @@ GDSII Generation
 
 # Functional Verification
 
-The architecture was verified for multiple secure boot scenarios including:
-
-- Valid firmware authentication
-- Invalid firmware detection
-- Retry counter validation
-- Lockdown activation
-- CPU reset enforcement
-- Secure boot FSM transitions
-- PASS and FAIL authentication flows
+The architecture was verified using a five-scenario SystemVerilog directed testbench on Cadence Xcelium. All five test cases pass with zero errors.
+- Test 0: Trusted firmware — SHA-256 match — boot_pass=1, cpu_reset_n=1 — PASS
+- Test 1: HELLOWORLD — hash mismatch — boot_pass=0, cpu_reset_n=0, retry=1 — PASS
+- Test 2: SECUREBOOT_HACKD — hash mismatch — boot_pass=0, cpu_reset_n=0, retry=2 — PASS
+- Test 3: Three consecutive failures — lockdown_active=1, cpu_reset_n=0 — PASS
+- Test 4: Trusted firmware after reset — boot_pass=1, cpu_reset_n=1 — PASS
 
 ---
 
