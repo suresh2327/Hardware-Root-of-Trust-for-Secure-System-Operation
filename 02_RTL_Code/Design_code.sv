@@ -498,6 +498,43 @@ module cpu_reset_ctrl (
     else                           cpu_reset_n <= 0;
 endmodule
 
+ module debug_ctrl (
+  input  logic clk,
+  input  logic rst_n,
+  input  logic lockdown_active,
+  input  logic boot_pass,
+  output logic jtag_disable,
+  output logic debug_enable
+);
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      jtag_disable <= 1'b1;   // default: JTAG locked at reset
+      debug_enable <= 1'b0;
+    end else begin
+      // Lock JTAG permanently once lockdown is activated
+      jtag_disable <= lockdown_active | ~boot_pass;
+      // Debug only allowed when boot passed AND no lockdown
+      debug_enable <= boot_pass & ~lockdown_active;
+    end
+  end
+
+  // SVA: JTAG must always be disabled during lockdown
+  // synthesis translate_off
+  property jtag_locked_during_lockdown;
+    @(posedge clk) lockdown_active |-> jtag_disable;
+  endproperty
+  assert property (jtag_locked_during_lockdown)
+    else $error("SECURITY VIOLATION: JTAG enabled during lockdown!");
+
+  // SVA: debug must never be enabled during lockdown
+  property no_debug_during_lockdown;
+    @(posedge clk) lockdown_active |-> !debug_enable;
+  endproperty
+  assert property (no_debug_during_lockdown)
+    else $error("SECURITY VIOLATION: debug enabled during lockdown!");
+  // synthesis translate_on
+
+endmodule
 
 // ----------------------------------------------------------------
 //  rot_top - top-level integration
@@ -556,5 +593,14 @@ module rot_top (
     .clk(clk), .rst_n(rst_n),
     .lockdown_active(lockdown_active), .policy_allow(policy_allow),
     .cpu_reset_n(cpu_reset_n)
+  );
+
+   debug_ctrl u_debug_ctrl (
+    .clk             (clk),
+    .rst_n           (rst_n),
+    .lockdown_active (lockdown_active),
+    .boot_pass       (boot_pass),
+    .jtag_disable    (jtag_disable),
+    .debug_enable    (debug_enable)
   );
 endmodule
