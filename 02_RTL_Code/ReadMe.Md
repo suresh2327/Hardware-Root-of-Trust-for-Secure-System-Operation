@@ -74,21 +74,6 @@ In practical silicon implementations, this storage would typically be implemente
 
 to provide immutable hardware-level trust anchoring.
 
----
-
-## Directory Structure
-
-```text
-rtl/
-├── rot_top.sv
-├── boot_ctrl_fsm.sv
-├── auth_engine.sv
-├── secure_key_storage.sv
-├── policy_engine.sv
-├── retry_counter.sv
-├── lockdown_ctrl.sv
-├── cpu_reset_ctrl.sv
-```
 
 ---
 
