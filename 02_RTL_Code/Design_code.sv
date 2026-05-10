@@ -547,6 +547,8 @@ module rot_top (
   logic retry_exceeded, policy_allow, policy_deny, policy_lockdown;
   logic lockdown_active, auth_fail_pulse;
   logic [255:0] trusted_key;
+  logic jtag_disable;
+logic debug_enable;
 
   assign secure_mode = !lockdown_active && boot_pass;
 
