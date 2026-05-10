@@ -85,20 +85,7 @@ tb/
 └── interface.sv
 ```
 
-Testbench/
-├── rot_tb_top.sv
-├── uvm_rot_pkg.sv
-├── rot_if.sv
-├── rot_seq_item.sv
-├── rot_driver.sv
-├── rot_monitor.sv
-├── rot_agent.sv
-├── rot_scoreboard.sv
-├── rot_env.sv
-├── rot_base_test.sv
-└── rot_sequences.sv
 
----
 
 ## Verification Coverage
 
