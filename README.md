@@ -201,7 +201,7 @@ Potential future extensions include:
 - Rollback protection support
 - Recovery boot mechanism
 - Runtime firmware integrity monitoring
-- Enhanced UVM-based constrained-random verification
+- Enhanced constrained-random verification
 - Secure debug access control
 
 ---

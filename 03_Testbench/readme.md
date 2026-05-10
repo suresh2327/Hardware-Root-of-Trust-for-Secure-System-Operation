@@ -39,7 +39,7 @@ The testbench is designed for functional verification of the RTL implementation 
 
 | Category | Technology |
 |---|---|
-| Verification Language | SystemVerilog / UVM |
+| Verification Language | SystemVerilog |
 | Verification Style | Directed Functional Verification |
 | Simulation Tool | Cadence Xcelium |
 

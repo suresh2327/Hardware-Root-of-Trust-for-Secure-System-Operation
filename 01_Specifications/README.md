@@ -206,7 +206,7 @@ Future implementations can support secure Over-The-Air (OTA) firmware update aut
 
 
 ## 4. Enhanced Verification Environment
-The current functional verification flow can be extended with complete UVM-based constrained-random verification, assertions, and functional coverage analysis.
+The current functional verification flow can be extended with complete constrained-random verification, assertions, and functional coverage analysis.
 
 ## 5. Recovery Mode Implementation
 A dedicated secure recovery mechanism can be integrated to restore valid firmware after authentication failure or lockdown conditions.
