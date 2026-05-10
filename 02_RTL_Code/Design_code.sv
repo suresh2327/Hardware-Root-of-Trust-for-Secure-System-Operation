@@ -498,7 +498,40 @@ module cpu_reset_ctrl (
     else                           cpu_reset_n <= 0;
 endmodule
 
+module debug_ctrl (
+    input  logic clk,
+    input  logic rst_n,
 
+    // Security status inputs
+    input  logic auth_pass,
+    input  logic auth_fail,
+    input  logic lockdown_active,
+
+    // Debug control outputs
+    output logic jtag_disable,
+    output logic debug_enable
+);
+
+always_comb begin
+
+    // Default values
+    jtag_disable = 1'b0;
+    debug_enable = 1'b0;
+
+    // Enable debug only after successful authentication
+    if (auth_pass && !lockdown_active) begin
+        debug_enable = 1'b1;
+        jtag_disable = 1'b0;
+    end
+
+    // Disable debug access during authentication failure
+    else if (auth_fail || lockdown_active) begin
+        debug_enable = 1'b0;
+        jtag_disable = 1'b1;
+    end
+end
+
+endmodule
 
 // ----------------------------------------------------------------
 //  rot_top - top-level integration
