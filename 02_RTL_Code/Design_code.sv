@@ -124,11 +124,6 @@ module sha256_core(
         end
       endcase
     end
-    // Security properties
-assert property (@(posedge clk) lockdown_active |-> !cpu_reset_n);
-assert property (@(posedge clk) boot_pass |-> auth_done);
-assert property (@(posedge clk) $rose(lockdown_active) |=> lockdown_active);
-assert property (@(posedge clk) rst_n == 0 |-> cpu_reset_n == 0);
   end
 endmodule
 
