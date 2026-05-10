@@ -592,12 +592,13 @@ module rot_top (
     .cpu_reset_n(cpu_reset_n)
   );
 
-   debug_ctrl u_debug_ctrl (
+  debug_ctrl u_debug_ctrl (
     .clk             (clk),
     .rst_n           (rst_n),
+    .auth_pass       (auth_pass),
+    .auth_fail       (auth_fail),
     .lockdown_active (lockdown_active),
-    .boot_pass       (boot_pass),
     .jtag_disable    (jtag_disable),
     .debug_enable    (debug_enable)
-  );
+);
 endmodule
