@@ -4,7 +4,6 @@
 This directory contains the SystemVerilog RTL implementation of a prototype Hardware Root-of-Trust (RoT) architecture designed for secure boot and firmware authentication in embedded and SoC platforms. The design verifies firmware integrity before CPU execution, ensuring that only authenticated firmware is allowed to execute during system startup.
 
 The implementation focuses on hardware-level secure boot control using SHA-256 based firmware authentication and trusted execution enforcement.
-
 ---
 
 ## RTL Modules
