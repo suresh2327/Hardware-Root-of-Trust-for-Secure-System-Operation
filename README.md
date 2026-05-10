@@ -35,6 +35,7 @@ This project addresses the problem by implementing a Hardware Root-of-Trust arch
 
 The proposed architecture establishes hardware-level trust during system startup through SHA-256 based firmware authentication.
 
+
 During the boot process:
 
 1. The CPU remains in reset state after power-on.
