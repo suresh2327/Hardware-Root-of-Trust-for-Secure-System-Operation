@@ -73,7 +73,7 @@ Authentication FAIL  → Retry / Lockdown
 | `rot_top` | Top-level integration of the complete RoT architecture |
 | `boot_ctrl_fsm` | Controls secure boot sequence and authentication flow |
 | `auth_engine` | Performs firmware authentication using SHA-256 |
-| `secure_key_storage` | Stores trusted reference hash/key values |
+| `secure_key_storage` |trusted reference value stored in a synthesizable secure key storage model|
 | `policy_engine` | Generates authentication-based boot decisions |
 | `retry_counter` | Tracks failed authentication attempts |
 | `lockdown_ctrl` | Activates secure lockdown protection |
@@ -167,7 +167,7 @@ The architecture was verified using a five-scenario SystemVerilog directed testb
 | Total Cell Count | 17,624 |
 | Total Synthesized Area | 152,631.912 µm² |
 | Worst Positive Slack (WNS) | 6141 ps |
-| Total Estimated Power | 1.92780e-02 W |
+| Total Estimated Power | 19.278 mW |
 
 ---
 
