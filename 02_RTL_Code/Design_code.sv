@@ -620,13 +620,6 @@ module rot_top (
     .auth_fail_pulse(auth_fail_pulse), .current_state()
   );
 
-  boot_ctrl_fsm u_boot_ctrl_fsm (
-    .clk(clk), .rst_n(rst_n), .boot_req(boot_req),
-    .auth_done(auth_done), .auth_pass(auth_pass),
-    .retry_exceeded(retry_exceeded), .lockdown_active(lockdown_active),
-    .start_auth(start_auth), .boot_done(boot_done), .boot_pass(boot_pass),
-    .auth_fail_pulse(auth_fail_pulse), .current_state()
-  );
 
   auth_engine u_auth_engine (
     .clk(clk), .rst_n(rst_n), .start_auth(start_auth),
