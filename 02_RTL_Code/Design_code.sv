@@ -544,6 +544,11 @@ module rot_top (
   logic [255:0] trusted_key;
   logic jtag_disable;
 logic debug_enable;
+  // In rot_top — add these ports/signals as stubs:
+output logic        rollback_alert,      // future: anti-rollback
+output logic [7:0]  fw_version,          // future: version tracking  
+input  logic        ota_update_req,      // future: OTA auth
+output logic        tee_handoff          // future: TEE integration
 
   assign secure_mode = !lockdown_active && boot_pass;
 
