@@ -551,6 +551,29 @@ input  logic        ota_update_req,      // future: OTA auth
 output logic        tee_handoff          // future: TEE integration
 
   assign secure_mode = !lockdown_active && boot_pass;
+  // In rot_top, add these as actual registers not just wires:
+
+// Anti-rollback: firmware version tracking
+logic [7:0] fw_version_reg;
+logic       rollback_detected;
+
+always_ff @(posedge clk or negedge rst_n) begin
+  if (!rst_n) begin
+    fw_version_reg  <= 8'h00;
+    rollback_detected <= 1'b0;
+  end else if (boot_pass) begin
+    // Future: compare fw_version with stored minimum version
+    // For now: register the version for OTA use
+    fw_version_reg <= fw_version;
+    rollback_detected <= (fw_version < fw_version_reg);
+  end
+end
+
+// TEE handoff signal - asserted after trusted boot
+always_ff @(posedge clk or negedge rst_n)
+  if (!rst_n)       tee_handoff <= 1'b0;
+  else if (boot_pass) tee_handoff <= 1'b1;
+  else              tee_handoff <= 1'b0;
 
   boot_ctrl_fsm u_boot_ctrl_fsm (
     .clk(clk), .rst_n(rst_n), .boot_req(boot_req),
