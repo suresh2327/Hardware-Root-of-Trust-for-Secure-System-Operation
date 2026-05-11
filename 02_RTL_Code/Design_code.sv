@@ -536,48 +536,89 @@ endmodule
 //  rot_top - top-level integration
 // ----------------------------------------------------------------
 module rot_top (
-  input  logic        clk, rst_n, boot_req,
+   input  logic        clk,
+  input  logic        rst_n,
+  input  logic        boot_req,
   input  logic [31:0] fw_data,
-  input  logic        fw_valid, fw_last,
+  input  logic        fw_valid,
+  input  logic        fw_last,
   input  logic [1:0]  fw_strobe,
-  output logic        cpu_reset_n, boot_done, boot_pass, secure_mode
+
+  // Core outputs
+  output logic        cpu_reset_n,
+  output logic        boot_done,
+  output logic        boot_pass,
+  output logic        secure_mode,
+
+  // Future-scope: anti-rollback
+  input  logic [7:0]  fw_version_in,      // version field from firmware header
+  output logic        rollback_alert,      // high if version < stored minimum
+
+  // Future-scope: OTA authentication
+  input  logic        ota_update_req,      // request to authenticate OTA image
+  output logic        ota_auth_grant,      // OTA authentication approved
+
+  // Future-scope: TEE handoff
+  output logic        tee_handoff,         // pulse after trusted boot completes
+
+  // Future-scope: debug control (exposed for chip-level integration)
+  output logic        jtag_disable,
+  output logic        debug_enable
 );
+
+  // ---- Internal signals -----------------------------------------------
   logic auth_done, auth_pass, start_auth;
   logic retry_exceeded, policy_allow, policy_deny, policy_lockdown;
   logic lockdown_active, auth_fail_pulse;
   logic [255:0] trusted_key;
-  logic jtag_disable;
-logic debug_enable;
-  // In rot_top — add these ports/signals as stubs:
-output logic        rollback_alert,      // future: anti-rollback
-output logic [7:0]  fw_version,          // future: version tracking  
-input  logic        ota_update_req,      // future: OTA auth
-output logic        tee_handoff          // future: TEE integration
 
+  // ---- Derived combinational ------------------------------------------
   assign secure_mode = !lockdown_active && boot_pass;
-  // In rot_top, add these as actual registers not just wires:
 
-// Anti-rollback: firmware version tracking
-logic [7:0] fw_version_reg;
-logic       rollback_detected;
+  // ---- Anti-rollback register -----------------------------------------
+  // Stores the minimum acceptable firmware version seen after a good boot.
+  // Future: compare against eFuse-burned minimum version.
+  logic [7:0] fw_version_min;
+  logic       rollback_detected;
 
-always_ff @(posedge clk or negedge rst_n) begin
-  if (!rst_n) begin
-    fw_version_reg  <= 8'h00;
-    rollback_detected <= 1'b0;
-  end else if (boot_pass) begin
-    // Future: compare fw_version with stored minimum version
-    // For now: register the version for OTA use
-    fw_version_reg <= fw_version;
-    rollback_detected <= (fw_version < fw_version_reg);
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      fw_version_min   <= 8'h00;
+      rollback_detected <= 1'b0;
+    end else if (boot_pass && auth_pass) begin
+      // Ratchet: only update stored minimum if new version is higher
+      if (fw_version_in > fw_version_min)
+        fw_version_min <= fw_version_in;
+      rollback_detected <= (fw_version_in < fw_version_min);
+    end else begin
+      rollback_detected <= 1'b0;
+    end
   end
-end
 
-// TEE handoff signal - asserted after trusted boot
-always_ff @(posedge clk or negedge rst_n)
-  if (!rst_n)       tee_handoff <= 1'b0;
-  else if (boot_pass) tee_handoff <= 1'b1;
-  else              tee_handoff <= 1'b0;
+  assign rollback_alert = rollback_detected;
+
+  // ---- OTA auth stub --------------------------------------------------
+  // Future: route ota_update_req through a second auth_engine instance.
+  // For now: OTA grant requires a successful boot AND no rollback.
+  assign ota_auth_grant = boot_pass && !rollback_alert && !lockdown_active;
+
+  // ---- TEE handoff register -------------------------------------------
+  // Single-cycle pulse after trusted boot, cleared on next reset.
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n)
+      tee_handoff <= 1'b0;
+    else
+      tee_handoff <= boot_pass && !lockdown_active;
+  end
+
+  // ---- Submodule instantiations --------------------------------------
+  boot_ctrl_fsm u_boot_ctrl_fsm (
+    .clk(clk), .rst_n(rst_n), .boot_req(boot_req),
+    .auth_done(auth_done), .auth_pass(auth_pass),
+    .retry_exceeded(retry_exceeded), .lockdown_active(lockdown_active),
+    .start_auth(start_auth), .boot_done(boot_done), .boot_pass(boot_pass),
+    .auth_fail_pulse(auth_fail_pulse), .current_state()
+  );
 
   boot_ctrl_fsm u_boot_ctrl_fsm (
     .clk(clk), .rst_n(rst_n), .boot_req(boot_req),
