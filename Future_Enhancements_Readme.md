@@ -1,4 +1,6 @@
 # Future Enhancements
+The current RTL architecture includes preliminary interface hooks and modular infrastructure for future security enhancements.
+
 
 The current Hardware Root-of-Trust (RoT) architecture is designed using a modular RTL structure, allowing future security extensions and architectural improvements. Several interface hooks and control signals have already been introduced in the current implementation to support future scalability.
 
