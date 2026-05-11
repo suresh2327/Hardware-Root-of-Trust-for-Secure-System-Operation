@@ -59,7 +59,7 @@ The design integrates the following RTL modules:
 | `boot_ctrl_fsm` | Secure boot sequencing FSM |
 | `auth_engine` | Firmware authentication manager |
 | `sha256_core` | SHA-256 cryptographic engine |
-| `secure_key_storage` | Trusted hash storage |
+| `secure_key_storage` | trusted reference hash stored in RTL-based secure storage |
 | `policy_engine` | Security decision logic |
 | `retry_counter` | Failed authentication tracking |
 | `lockdown_ctrl` | Permanent lockdown controller |
@@ -200,3 +200,24 @@ Hardware-Root-of-Trust-for-Secure-System-Operation/
 ├── 06_Results/
 ├── 07_Script_files/
 └── README.md
+
+# 🔮 Future Enhancements
+
+The current Hardware Root-of-Trust (RoT) architecture is designed using a modular RTL structure, allowing future security extensions and scalability improvements. The latest RTL implementation also includes preliminary interface hooks and control infrastructure for future expansion.
+
+## Planned Enhancements
+
+- Runtime firmware integrity monitoring support after system boot
+- Secure OTA firmware update authentication support
+- Anti-rollback firmware protection using firmware version tracking
+- Enhanced secure key storage using ROM/eFuse/OTP-based implementation
+- Trusted Execution Environment (TEE) integration support
+- Extended secure debug and protected JTAG access control
+- Migration toward complete UVM-based constrained-random verification
+- Formal verification and assertion-based security validation
+- Support for additional cryptographic algorithms such as AES, RSA, and ECC
+- Low-power optimization for security-oriented hardware blocks
+- FPGA-based prototype implementation for real-time validation
+- Modular security policy extensions for advanced authentication control
+
+These enhancements are not fully implemented in the current version, but the modular architecture and existing RTL hooks allow future integration with minimal structural modification.
