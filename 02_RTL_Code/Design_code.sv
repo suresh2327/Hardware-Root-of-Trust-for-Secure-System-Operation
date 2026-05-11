@@ -419,14 +419,14 @@ endmodule
 module secure_key_storage (
     input  logic         clk,
     input  logic         rst_n,
-    output logic [255:0] trusted_hash
+  output logic [255:0] trusted_key
 );
 
 always_ff @(posedge clk or negedge rst_n) begin
     if(!rst_n)
-        trusted_hash <= 256'h0;
+        trusted_key <= 256'h0;
     else
-        trusted_hash <= 256'hcc369d06174db4fa54f4f20ae1523a10f8aa409a4b51193135fc798ce426e40e;
+        trusted_key <= 256'hcc369d06174db4fa54f4f20ae1523a10f8aa409a4b51193135fc798ce426e40e;
 end
 
 endmodule
