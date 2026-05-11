@@ -42,7 +42,7 @@ FAIL → Lockdown / Reset
 ## Design Highlights
 
 - Hardware-Enforced Secure Boot
-- SHA-256 Firmware Authentication
+-Performs SHA-256 based firmware authentication
 - CPU Reset-Based Execution Control
 - Retry & Lockdown Protection
 - Modular Synthesizable RTL Architecture
@@ -55,7 +55,7 @@ FAIL → Lockdown / Reset
 | Category | Tool / Technology |
 |---|---|
 | HDL | SystemVerilog |
-| Verification | SystemVerilog-based Functional Verification |
+| Verification | SystemVerilog-based Directed Functional Verification |
 | Simulation | Cadence Xcelium |
 | Synthesis | Cadence Genus |
 | Physical Design | Cadence Innovus |
@@ -88,7 +88,7 @@ The RTL implementation was functionally verified for:
 
 ---
 ## Future Enhancements
-
+The current RTL architecture includes preliminary interface hooks and modular infrastructure for future security enhancements.
 - Runtime firmware integrity monitoring support  
 - Secure OTA firmware update authentication support  
 - Anti-rollback firmware protection using firmware version tracking  
