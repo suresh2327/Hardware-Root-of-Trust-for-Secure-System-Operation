@@ -193,19 +193,7 @@ The current implementation focuses on:
 
 ---
 
-# Future Enhancements
 
-Potential future extensions include:
-
-- ROM/eFuse/OTP-based secure key storage
-- Secure firmware update authentication
-- Rollback protection support
-- Recovery boot mechanism
-- Runtime firmware integrity monitoring
-- Enhanced constrained-random verification
-- Secure debug access control
-
----
 
 # Applications
 
