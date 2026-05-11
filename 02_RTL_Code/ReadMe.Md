@@ -87,7 +87,19 @@ The RTL implementation was functionally verified for:
 - Secure boot state transitions
 
 ---
+## Future Enhancements
 
+- Runtime firmware integrity monitoring support  
+- Secure OTA firmware update authentication support  
+- Anti-rollback firmware protection using firmware version tracking  
+- Enhanced secure key storage using ROM/eFuse/OTP implementation  
+- Trusted Execution Environment (TEE) handoff support  
+- Extended secure debug control and protected debug access  
+- Migration toward complete UVM-based constrained-random verification  
+- Formal verification and assertion-based security validation   
+- Low-power optimization for security-oriented hardware blocks  
+- FPGA-based prototype implementation for hardware validation  
+- Modular policy engine extension for advanced security control  
 ## Objective
 
 To demonstrate a synthesizable hardware-based secure boot architecture capable of authenticating firmware before CPU execution and establishing a trusted startup mechanism for embedded systems and SoC platforms.
