@@ -119,7 +119,6 @@ A version ratchet register (`fw_version_min`) is implemented in `rot_top`. After
 - `fw_version_in [7:0]` — firmware version field from the firmware header
 - `rollback_alert` — asserted if the incoming version is below the stored minimum
 
-**Limitation:** The minimum version register is volatile (RAM-based). A production implementation would store this value in eFuse or OTP to prevent reset-based rollback attacks.
 
 ---
 
@@ -130,9 +129,6 @@ A registered output signal `tee_handoff` is driven high after a successful authe
 
 **Port exposed:**
 - `tee_handoff` — registered pulse after trusted boot completes
-
-**Limitation:** No TEE controller is instantiated. The signal is a handoff trigger only; the receiving TEE logic is out of scope for the current design.
-
 ---
 
 ### 3. OTA Firmware Authentication Interface
@@ -144,8 +140,6 @@ A top-level port for OTA update requests is present. The current grant logic is 
 - `ota_update_req` — input request to authenticate an OTA firmware image
 - `ota_auth_grant` — output approval signal
 
-**Limitation:** No second `auth_engine` instance is present for independent OTA image authentication. The current logic reuses the boot authentication result as a proxy. A full implementation requires a dedicated authentication path.
-
 ---
 
 ### 4. Secure Debug Access Control
@@ -156,8 +150,6 @@ A `debug_ctrl` module is instantiated and connected in `rot_top`. JTAG access is
 **Ports exposed:**
 - `jtag_disable` — asserted to disable JTAG access
 - `debug_enable` — asserted only when `auth_pass` is high and `lockdown_active` is low
-
-**Limitation:** The module uses combinational logic only. A registered implementation with glitch filtering would be preferred for production security.
 
 ---
 
