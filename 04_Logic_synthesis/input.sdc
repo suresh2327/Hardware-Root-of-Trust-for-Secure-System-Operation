@@ -24,10 +24,7 @@ set_input_delay 1.0 -clock clk [remove_from_collection [all_inputs] [get_ports c
 #-------------------------------
 set_output_delay 1.0 -clock clk [all_outputs]
 
-#-------------------------------
-# Driving Cell Assumptions
-#-------------------------------
-set_driving_cell -lib_cell BUF_X4 [all_inputs]
+
 
 #-------------------------------
 # Output Load Assumptions
@@ -55,23 +52,7 @@ set_max_area 0
 #-------------------------------
 set_false_path -from [get_ports rst_n]
 
-#-------------------------------
-# Multicycle Paths
-# SHA-256 iterative rounds
-# Helps timing optimization
-#-------------------------------
-set_multicycle_path 2 -setup \
--from [get_registers *round*] \
--to [get_registers *round*]
 
-set_multicycle_path 1 -hold \
--from [get_registers *round*] \
--to [get_registers *round*]
-
-#-------------------------------
-# Power Optimization Hint
-#-------------------------------
-set_dynamic_optimization true
 
 #-------------------------------
 # Wire Load Model
