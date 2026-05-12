@@ -7,6 +7,7 @@
 //    last_block=0 -> update H0..H7 state, assert done, stay ready
 //    last_block=1 -> update H0..H7, output digest, reset for next msg
 // ----------------------------------------------------------------
+
 module sha256_core(
   input  wire         clk,
   input  wire         rst,
