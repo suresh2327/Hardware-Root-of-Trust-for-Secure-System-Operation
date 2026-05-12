@@ -563,7 +563,18 @@ module rot_top (
 
   // Future-scope: debug control (exposed for chip-level integration)
   output logic        jtag_disable,
-  output logic        debug_enable
+  output logic        debug_enable,
+    // Future-scope: AI-assisted policy engine
+  input  logic        ai_policy_hint,
+  output logic        ai_override_active,
+
+  // Future-scope: hardware intrusion detection
+  input  logic        tamper_detect_in,
+  output logic        tamper_alert,
+
+  // Future-scope: multi-core boot sequencing
+  input  logic [3:0]  core_ready,
+  output logic [3:0]  core_boot_grant
 );
 
   // ---- Internal signals -----------------------------------------------
@@ -580,17 +591,7 @@ module rot_top (
   // Future: compare against eFuse-burned minimum version.
   logic [7:0] fw_version_min;
   logic       rollback_detected;
-  // Future-scope: AI-assisted policy engine
-  input  logic        ai_policy_hint,
-  output logic        ai_override_active,
 
-  // Future-scope: hardware intrusion detection
-  input  logic        tamper_detect_in,
-  output logic        tamper_alert,
-
-  // Future-scope: multi-core boot sequencing
-  input  logic [3:0]  core_ready,
-  output logic [3:0]  core_boot_grant
 
   always_ff @(posedge clk or negedge rst_n) begin
     if (!rst_n) begin
