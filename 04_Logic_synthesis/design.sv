@@ -416,15 +416,19 @@ endmodule
 //  Change ONLY this parameter to update the trusted firmware hash.
 //  Run: python3 -c "import hashlib; print(hashlib.sha256(b'YOUR_FW').hexdigest())"
 // ----------------------------------------------------------------
-module secure_key_storage #(
-  parameter logic [255:0] EXPECTED_HASH =
-    256'hcc369d06174db4fa54f4f20ae1523a10f8aa409a4b51193135fc798ce426e40e
-)(
-  input  logic        clk, rst_n,
+module secure_key_storage (
+    input  logic         clk,
+    input  logic         rst_n,
   output logic [255:0] trusted_key
 );
-  always_ff @(posedge clk or negedge rst_n)
-    if (!rst_n) trusted_key <= '0; else trusted_key <= EXPECTED_HASH;
+
+always_ff @(posedge clk or negedge rst_n) begin
+    if(!rst_n)
+        trusted_key <= 256'h0;
+    else
+        trusted_key <= 256'hcc369d06174db4fa54f4f20ae1523a10f8aa409a4b51193135fc798ce426e40e;
+end
+
 endmodule
 
 
@@ -493,24 +497,157 @@ module cpu_reset_ctrl (
     else                           cpu_reset_n <= 0;
 endmodule
 
+module debug_ctrl (
+    input  logic clk,
+    input  logic rst_n,
+
+    // Security status inputs
+    input  logic auth_pass,
+    input  logic auth_fail,
+    input  logic lockdown_active,
+
+    // Debug control outputs
+    output logic jtag_disable,
+    output logic debug_enable
+);
+
+always_comb begin
+
+    // Default values
+    jtag_disable = 1'b0;
+    debug_enable = 1'b0;
+
+    // Enable debug only after successful authentication
+    if (auth_pass && !lockdown_active) begin
+        debug_enable = 1'b1;
+        jtag_disable = 1'b0;
+    end
+
+    // Disable debug access during authentication failure
+    else if (auth_fail || lockdown_active) begin
+        debug_enable = 1'b0;
+        jtag_disable = 1'b1;
+    end
+end
+
+endmodule
 
 // ----------------------------------------------------------------
 //  rot_top - top-level integration
 // ----------------------------------------------------------------
 module rot_top (
-  input  logic        clk, rst_n, boot_req,
+   input  logic        clk,
+  input  logic        rst_n,
+  input  logic        boot_req,
   input  logic [31:0] fw_data,
-  input  logic        fw_valid, fw_last,
+  input  logic        fw_valid,
+  input  logic        fw_last,
   input  logic [1:0]  fw_strobe,
-  output logic        cpu_reset_n, boot_done, boot_pass, secure_mode
+
+  // Core outputs
+  output logic        cpu_reset_n,
+  output logic        boot_done,
+  output logic        boot_pass,
+  output logic        secure_mode,
+
+  // Future-scope: anti-rollback
+  input  logic [7:0]  fw_version_in,      // version field from firmware header
+  output logic        rollback_alert,      // high if version < stored minimum
+
+  // Future-scope: OTA authentication
+  input  logic        ota_update_req,      // request to authenticate OTA image
+  output logic        ota_auth_grant,      // OTA authentication approved
+
+  // Future-scope: TEE handoff
+  output logic        tee_handoff,         // pulse after trusted boot completes
+
+  // Future-scope: debug control (exposed for chip-level integration)
+  output logic        jtag_disable,
+  output logic        debug_enable,
+    // Future-scope: AI-assisted policy engine
+  input  logic        ai_policy_hint,
+  output logic        ai_override_active,
+
+  // Future-scope: hardware intrusion detection
+  input  logic        tamper_detect_in,
+  output logic        tamper_alert,
+
+  // Future-scope: multi-core boot sequencing
+  input  logic [3:0]  core_ready,
+  output logic [3:0]  core_boot_grant
 );
+
+  // ---- Internal signals -----------------------------------------------
   logic auth_done, auth_pass, start_auth;
   logic retry_exceeded, policy_allow, policy_deny, policy_lockdown;
   logic lockdown_active, auth_fail_pulse;
   logic [255:0] trusted_key;
 
+  // ---- Derived combinational ------------------------------------------
   assign secure_mode = !lockdown_active && boot_pass;
 
+  // ---- Anti-rollback register -----------------------------------------
+  // Stores the minimum acceptable firmware version seen after a good boot.
+  // Future: compare against eFuse-burned minimum version.
+  logic [7:0] fw_version_min;
+  logic       rollback_detected;
+
+
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+      fw_version_min   <= 8'h00;
+      rollback_detected <= 1'b0;
+    end else if (boot_pass && auth_pass) begin
+      // Ratchet: only update stored minimum if new version is higher
+      if (fw_version_in > fw_version_min)
+        fw_version_min <= fw_version_in;
+      rollback_detected <= (fw_version_in < fw_version_min);
+    end else begin
+      rollback_detected <= 1'b0;
+    end
+  end
+
+  assign rollback_alert = rollback_detected;
+
+  // ---- OTA auth stub --------------------------------------------------
+  // Future: route ota_update_req through a second auth_engine instance.
+  // For now: OTA grant requires a successful boot AND no rollback.
+  assign ota_auth_grant = boot_pass && !rollback_alert && !lockdown_active;
+
+  // ---- TEE handoff register -------------------------------------------
+  // Single-cycle pulse after trusted boot, cleared on next reset.
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n)
+      tee_handoff <= 1'b0;
+    else
+      tee_handoff <= boot_pass && !lockdown_active;
+  end
+// ---- AI policy stub -------------------------------------------------
+  // Future: external AI engine sends policy_hint; override fires if hint
+  // disagrees with local policy AND auth is valid.
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) ai_override_active <= 1'b0;
+    else        ai_override_active <= ai_policy_hint && auth_pass 
+                                      && !lockdown_active;
+  end
+
+  // ---- Hardware intrusion detection -----------------------------------
+  // Future: connect to physical tamper mesh / voltage sensors.
+  // Tamper event forces lockdown via policy_lockdown path.
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) tamper_alert <= 1'b0;
+    else        tamper_alert <= tamper_detect_in;
+  end
+
+  // ---- Multi-core boot grant ------------------------------------------
+  // Future: stagger core releases post-RoT authentication.
+  // Core N boots only after RoT passes and core is ready.
+  always_ff @(posedge clk or negedge rst_n) begin
+    if (!rst_n) core_boot_grant <= 4'b0000;
+    else        core_boot_grant <= {4{boot_pass && !lockdown_active}} 
+                                    & core_ready;
+  end
+  // ---- Submodule instantiations --------------------------------------
   boot_ctrl_fsm u_boot_ctrl_fsm (
     .clk(clk), .rst_n(rst_n), .boot_req(boot_req),
     .auth_done(auth_done), .auth_pass(auth_pass),
@@ -518,6 +655,7 @@ module rot_top (
     .start_auth(start_auth), .boot_done(boot_done), .boot_pass(boot_pass),
     .auth_fail_pulse(auth_fail_pulse), .current_state()
   );
+
 
   auth_engine u_auth_engine (
     .clk(clk), .rst_n(rst_n), .start_auth(start_auth),
@@ -538,7 +676,7 @@ module rot_top (
 
   retry_counter #(.MAX_RETRY(3)) u_retry_counter (
     .clk(clk), .rst_n(rst_n),
-    .auth_fail(auth_fail_pulse), .lockdown_clear(1'b0),
+    .auth_fail(auth_fail_pulse), .lockdown_clear(1'b0),  // Intentional: only hw reset clears lockdown
     .retry_exceeded(retry_exceeded)
   );
 
@@ -552,4 +690,14 @@ module rot_top (
     .lockdown_active(lockdown_active), .policy_allow(policy_allow),
     .cpu_reset_n(cpu_reset_n)
   );
+
+debug_ctrl u_debug_ctrl (
+    .clk             (clk),
+    .rst_n           (rst_n),
+    .auth_pass       (auth_pass),
+    .auth_fail       (auth_fail_pulse),
+    .lockdown_active (lockdown_active),
+    .jtag_disable    (jtag_disable),
+    .debug_enable    (debug_enable)
+);
 endmodule
